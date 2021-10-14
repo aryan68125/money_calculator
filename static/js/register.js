@@ -11,6 +11,47 @@ const emailField = document.querySelector('#emailField'); //select via id
 //declare emailFeedbackArea here
 const emailFeedbackArea = document.querySelector('.emailFeedBackArea');
 
+//get the passwordField via id
+const passwordField = document.querySelector('#passwordField'); //get the password class input field via id
+
+//get the passwordField2 via id
+const passwordField2 = document.querySelector('#passwordField2'); //get the password2 class input field via id
+
+//now get password show toggle field via class
+const showPasswordToggle = document.querySelector('.showPasswordToggle');
+
+//add event listener to the password field in the register.html form inorder to show ow hide password using show toggle
+showPasswordToggle.addEventListener('click', (e) => {
+  //now here we want to change SHOW to HIDE when the user clicks on it
+  if(showPasswordToggle.textContent ==='SHOW')
+  {
+    //if true then set showPasswordToggle.textContent to HIDE
+    showPasswordToggle.textContent = 'HIDE';
+
+    //update the passsword with the actual password text and replace the **** that hides the password
+    passwordField.setAttribute('type','text');
+  }
+  else
+  {
+    //if false then set showPasswordToggle.textContent to SHOW
+    showPasswordToggle.textContent = 'SHOW';
+    //update the passsword with the actual password text and replace the password with **** that hides the password
+    passwordField.setAttribute('type','password');
+  }
+});
+
+//checking if password and password2 is matching or not
+var check = function() {
+  if (document.getElementById('passwordField').value ==
+    document.getElementById('passwordField2').value) {
+    document.getElementById('message').style.color = '#9fd3c7';
+    document.getElementById('message').innerHTML = 'matching';
+  } else {
+    document.getElementById('message').style.color = '#8a1253';
+    document.getElementById('message').innerHTML = 'not matching';
+  }
+}
+
 //add an eventListener to emailField
 emailField.addEventListener('keyup', (e) => {
 

@@ -55,6 +55,7 @@
           <div class="emailFeedBackArea invalid-feedback" style="display:none">
           </div>
 
+         <!---password field 1--->
           <div class="form-group" style="margin-top:15px;">
             <input
               type="password"
@@ -62,9 +63,23 @@
               placeholder="Password"
               class="form-control form-control-sm"
               id="passwordField"
+              onkeyup='check();'
             />
             <small class="float-right py-3 showPasswordToggle">SHOW</small>
           </div>
+          <span id='message'></span>
+          <!---Password field 2--->
+          <div class="form-group" style="margin-top:15px; margin-bottom:15px;">
+            <input
+              type="password"
+              name="password2"
+              placeholder="Password"
+              class="form-control form-control-sm"
+              id="passwordField2"
+              onkeyup='check();'
+            />
+          </div>
+
           <input type="submit" value="Register" class="btn btn-block btn-primary submit-btn" />
         </form>
 
