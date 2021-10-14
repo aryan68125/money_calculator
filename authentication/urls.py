@@ -29,4 +29,5 @@ urlpatterns = [
 
     #url routes related to username and email validation in real time
     path('validate-username/', csrf_exempt(views.UsernameValidationView.as_view()), name='validate-username'),
+    path('validate-email/', csrf_exempt(views.EmailValidationView.as_view()), name='validate-email'),    
 ]
