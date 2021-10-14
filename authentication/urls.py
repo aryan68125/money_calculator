@@ -18,8 +18,15 @@ to this 'exaple url = path('', TaskList.as_view(), name='tasks'),'
 view by default looks for pk value
 path('task/<int:pk>/', TaskDetail.as_view(), name='tasks'),
 '''
+
+#here use a decorateor that will allow su to use pi calls to validate username
+from django.views.decorators.csrf import csrf_exempt
+
 urlpatterns = [
 
     path('register', views.RegistrationView.as_view() , name='register'),
     path('login', views.LoginView.as_view() , name='login'),
+
+    #url routes related to username and email validation in real time
+    path('validate-username/', csrf_exempt(views.UsernameValidationView.as_view()), name='validate-username'),
 ]
