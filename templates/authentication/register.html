@@ -65,8 +65,9 @@
               class="form-control form-control-sm"
               id="passwordField"
               onkeyup='check();'
+              style="margin-top:15px; margin-bottom:15px;"
             />
-            <small class="float-right py-3 showPasswordToggle">SHOW</small>
+            <small class="float-right py-3 showPasswordToggle" style="margin-top:15px; margin-bottom:15px;">SHOW</small>
           </div>
           <span id='message'></span>
           <!---Password field 2--->
@@ -78,7 +79,9 @@
               class="form-control form-control-sm"
               id="passwordField2"
               onkeyup='check();'
+              style="margin-top:15px; margin-bottom:15px;"
             />
+            <a href="{% url 'login' %}" style = "margin-top:15px; margin-bottom:15px;">Already have an account?</a>
           </div>
 
           <input type="submit" value="Register" class="btn btn-block btn-primary submit-btn" />

@@ -48,7 +48,9 @@
               onkeyup='check();'
               style = "margin-bottom:15px;"
             />
-            <small class="float-right py-3 showPasswordToggle" >SHOW</small>
+            <small class="float-right py-3 showPasswordToggle" style = "margin-top:15px; margin-bottom:15px;">SHOW</small>
+            <a href="{% url 'register' %}" style = "margin-top:15px; margin-bottom:15px;">Don't have an account?</a>
+            <a href="{% url 'register' %}" style = "margin-top:15px; margin-bottom:15px;">Forgot password?</a>
           </div>
           <span id='message'></span>
 
