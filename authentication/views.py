@@ -279,7 +279,8 @@ class LoginView(View):
                     #if the user account is activated via email verification link then allow user to login to their account
                     auth.login(request, user)
                     #now we can redirect user to the home page after login
-
+                    messages.success(request,'account activated you can now login')
+                    return redirect('expenses')
                 else:
                     messages.error(request,'It looks like your account is not activated')
                     message.warning(request,'Please check you email for activation link')
