@@ -20,14 +20,14 @@
       <div class="card-body">
         <div class="card-title py-3">
           <img src="{% static 'images/profiles/wallet.png' %}" class="image-center" />
-          <h4 style="text-align: center;">Oops! Email verification failed!</h4>
+          <h4 style="text-align: center;">Email verification Successfull!</h4>
         </div>
 
         <form action="" method="post">
           {% csrf_token %}
 
           {% include 'partials/messages.html' %}
-          <a href="{% url 'register' %}" class="link-light" style="text-align: center;">Register your account with a different email address</a>
+          <a href="{% url 'register' %}" class="link-light" style="text-align: center;">Click here Login with our username and email address</a>
         </form>
 
       </div>

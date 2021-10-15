@@ -183,7 +183,7 @@ class ActivateAccountView(View):
             print(f"user active stauts = {user.is_active}")
             user.save()
             messages.success(request,'account activated successfully')
-            return redirect('login')
+            return render(request,'authentication/success.html')
         messages.error(request,'account activation Failed!')
         return render(request,'authentication/error.html', status=401)
 
