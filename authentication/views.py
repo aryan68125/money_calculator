@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 
 #imports related to live username and email validation in the registration form
@@ -14,6 +14,50 @@ from validate_email import validate_email
 
 #imports related to displaying messages
 from django.contrib import messages
+
+
+#--------------------------USER REGISTRATION, LOGIN, AUTHENTICATION,LOGOUT RELATED IMPORTS STARTS HERE----------------------------------
+#for our login page to have proper login and user authaentication process we have to make these imports below
+from django.contrib.auth import login, authenticate, logout
+
+#import the built in django user model
+from django.contrib.auth.models import User
+
+'''this is a inbuilt django Views class that handles the remdering of views that are built in to the django web framework'''
+from django.views.generic import View
+
+'''install validate-email module before importing it type pip3 install validate-email in your terminal to install the module'''
+from validate_email import validate_email
+
+'''
+construct a url that is unique to the application that we've built so we need the the current domain that our application is running on
+and we will set it dynamically we can import this:- from django.contrib.sites.shortcuts import get_current_site
+'''
+from django.contrib.sites.shortcuts import get_current_site
+
+#now redirect user to the login page
+# so inorder to do that you need to import :- from django.template.loader import render_to_string this library renders a template with a context automatically
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
+from . utils import generated_token
+from django.core.mail import EmailMessage
+from django.conf import settings
+
+#import UserCreationForm built in django register form for register page
+from django.contrib.auth.forms import UserCreationForm
+
+#----------------------reset password----------------------
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+#----------------------reset password----------------------
+
+#restrict unauthenticated user from seeing add project page
+#we won't be using mixins here because we are using function based views mixins are used when using class based views when foloowing standard procedures for django web development
+#instead we will be using login_required decorator to ristrict unauthenticated users from acessing certain pages in our website
+from django.contrib.auth.decorators import login_required
+
+#--------------------------USER REGISTRATION, LOGIN, AUTHENTICATION,LOGOUT RELATED IMPORTS ENDS HERE----------------------------------
+
 
 # Create your views here.
 #this class will handle the registration of the users
@@ -47,8 +91,51 @@ class RegistrationView(View):
                 #save the user in the database
                 user = User.objects.create_user(username=username, email=email) #set username and email
                 user.set_password(password) #set the password
+
+                #now before we save the user we need to make sure that the newly created user cannot login into the website
+                user.is_active = False
+
                 #now finally save the changes and commit thoes changed data in the database
                 user.save()
+
+                #now after the user is saved in the database we can send them account activation link to their respective email address
+                #send the verification link to the user's email address
+
+                #step1. construct a url that is unique to the application that we've built so we need the the current domain that our application is running on
+                #       and we will set it dynamically we can import this:- from django.contrib.sites.shortcuts import get_current_site
+                current_site = get_current_site(request) #get_current_site(request) will give us the current domain of our website dinamically
+                #step2. create an email subject
+                email_subject= 'Email verification'
+
+                #step3. construct a message
+                # so inorder to do that you need to import :- from django.template.loader import render_to_string this library renders a template with a context automatically
+                #convert the user.pk into bytes so we need to import:- from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
+                #import a module that generated a unique token for our application when we need to verify the user's email address :- from django.contrib.auth.tokens import PasswordResetTokenGenerator it can be used to activate accounts and to reset password
+                create_a_context_for_front_end={
+                    'user':user,
+                    'domain':current_site.domain,
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                    'token': generated_token.make_token(user),
+                }
+                message = render_to_string('authentication/activate.html',create_a_context_for_front_end)
+                #step4. send an email for authentation of the account import :- from django.core.mail import EmailMessage and import settings :- from django.conf import settings
+                '''
+                email_message = EmailMessage(
+                   email_subject,            #subject of the email
+                   message,                  #message that you want to send via email
+                   settings.EMAIL_HOST_USER, #EMAIL_HOST = 'smtp.gmail.com' that is being imported from the settings.py of the django project
+                   [email],                  #email adderess entered by the user in the regitration form in the front end of the application of the django project
+                )
+                '''
+                email_message = EmailMessage(
+                   email_subject,
+                   message,
+                   settings.EMAIL_HOST_USER,
+                   [email],
+                )
+                email_message.send()
+                #now redirect user to the login page
+                return redirect('login')
 
                 #create the user account
 
@@ -71,6 +158,32 @@ class RegistrationView(View):
 
         else:
             return render(request, 'authentication/register.html', stuff_for_frontend)
+
+#this class is responsible for activating the user account when the user clicks the link in their email address
+class ActivateAccountView(View):
+    def get(self, request,uidb64,token):
+        print(f"request = {request}")
+        #in here we will check if the token is valid or not
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            print(f"uid = {uid}")
+            #do not use User.objects.filter(pk=uid).exists(): instead use User.objects.get(pk=uid) otherwise when you
+            #deploy your application on heroku it will throuw an exception
+            user = User.objects.get(pk=uid)
+            print(f"user = {user}")
+        except User.DoesNotExist:
+            user = None
+
+        #now check the user before activating them
+        if user is not None and generated_token.check_token(user,token):
+            print(f"token = {token}")
+            #now activate the user in the database for operational ready i.e user now have the permission to use the web Application
+            user.is_active = True
+            print(f"user active stauts = {user.is_active}")
+            user.save()
+            messages.success(request,'account activated successfully')
+            return redirect('login')
+        return render(request,'users/error.html', status=401)
 
 #JSON allows us to communicate with our font end
 #by default server will return a 200ok json response which is not ideal
