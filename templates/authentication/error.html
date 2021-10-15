@@ -43,9 +43,7 @@
           {% csrf_token %}
 
           {% include 'partials/messages.html' %}
-          <h4 style="text-align: center;">Register your account with a different email address</h4>
-
-          <input type="submit" value="Register" class="btn btn-block btn-primary submit-btn" href ="{% url 'register' %}" />
+          <h4 style="text-align: center;" href = "{% url 'register' %}">Register your account with a different email address</h4>
         </form>
 
       </div>
