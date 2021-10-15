@@ -136,7 +136,7 @@ class RegistrationView(View):
                 )
                 email_message.send()
                 #now redirect user to the login page
-                return redirect('login')
+                return redirect('success')
 
                 #create the user account
 
@@ -183,7 +183,7 @@ class ActivateAccountView(View):
             print(f"user active stauts = {user.is_active}")
             user.save()
             messages.success(request,'account activated successfully')
-            return redirect(request,'success')
+            return redirect('login')
         messages.error(request,'account activation Failed!')
         return render(request,'authentication/error.html', status=401)
 
