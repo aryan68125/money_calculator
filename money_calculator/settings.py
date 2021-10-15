@@ -15,6 +15,10 @@ import django_heroku
 from datetime import timedelta
 import os
 
+#make error messages into danger so that bootstrap can understand it and style it properly
+#before your do that you need to import messages
+from django.contrib import messages
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 #the TEMPLATE_DIRS is necessary so that django knows where your templates are stored for this PROJECT_ROOT
@@ -184,3 +188,8 @@ EMAIL_HOST_PASSWORD = 'rezwfjagyrxxmebx'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 django_heroku.settings(locals())
+
+#make error messages into danger so that bootstrap can understand it and style it properly
+MESSAGE_TAGS = {
+    messages.ERROR : 'danger'
+}

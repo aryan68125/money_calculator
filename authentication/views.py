@@ -12,11 +12,65 @@ from django.contrib.auth.models import User
 #import the validate-email module in this view
 from validate_email import validate_email
 
+#imports related to displaying messages
+from django.contrib import messages
+
 # Create your views here.
 #this class will handle the registration of the users
 class RegistrationView(View):
     def get(self, request):
         return render(request, 'authentication/register.html')
+
+    def post(self, request):
+        #handle the user registration process
+        #get user data from User djangoinbuilt model
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+
+        stuff_for_frontend = {
+            'fieldvalues': request.POST
+        }
+
+        #validate the user data
+        #disable the submit-btn when the user information is invalid in register.js
+        if not User.objects.filter(username=username).exists():
+            if not User.objects.filter(email=email).exists():
+                if len(password) <6:
+                    messages.error(request, "Your password should be atleast 6 charaters long")
+                    return render(request, 'authentication/register.html', stuff_for_frontend)
+                elif password != password2:
+                    messages.error(request, "Password is not matching")
+                    return render(request, 'authentication/register.html', stuff_for_frontend)
+
+                #save the user in the database
+                user = User.objects.create_user(username=username, email=email) #set username and email
+                user.set_password(password) #set the password
+                #now finally save the changes and commit thoes changed data in the database
+                user.save()
+
+                #create the user account
+
+                #display the messages
+                #types of messages
+                # messages.warning(request, 'Account created Activation link sent to your email')
+                #in order to sytle error messages you need to add this in settings.py file
+                #make error messages into danger so that bootstrap can understand it and style it properly
+                #import messages by typing from django.contrib import messages in settings.py file
+                # MESSAGE_TAGS = {
+                #     messages.ERROR : 'danger'
+                # }
+                # messages.error(request, 'Account created Activation link sent to your email')
+                messages.success(request, 'Account created Succesfully!')
+                messages.info(request, 'Activation link sent check your email')
+                return render(request, 'authentication/register.html', stuff_for_frontend)
+
+            else:
+                return render(request, 'authentication/register.html', stuff_for_frontend)
+
+        else:
+            return render(request, 'authentication/register.html', stuff_for_frontend)
 
 #JSON allows us to communicate with our font end
 #by default server will return a 200ok json response which is not ideal

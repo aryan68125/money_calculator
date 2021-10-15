@@ -20,6 +20,9 @@ const passwordField2 = document.querySelector('#passwordField2'); //get the pass
 //now get password show toggle field via class
 const showPasswordToggle = document.querySelector('.showPasswordToggle');
 
+//now get the submit button via class
+const submitbtn = document.querySelector('.submit-btn');
+
 //add event listener to the password field in the register.html form inorder to show ow hide password using show toggle
 showPasswordToggle.addEventListener('click', (e) => {
   //now here we want to change SHOW to HIDE when the user clicks on it
@@ -42,13 +45,23 @@ showPasswordToggle.addEventListener('click', (e) => {
 
 //checking if password and password2 is matching or not
 var check = function() {
-  if (document.getElementById('passwordField').value ==
+  if (document.getElementById('passwordField').value !=
     document.getElementById('passwordField2').value) {
+
+      document.getElementById('message').style.color = '#8a1253';
+      document.getElementById('message').innerHTML = 'not matching';
+
+      //disable the submit button if the email address entered by the user is not valid
+      submitbtn.setAttribute('disabled', 'disabled');
+      submitbtn.disabled=true;
+
+  } else {
+
     document.getElementById('message').style.color = '#9fd3c7';
     document.getElementById('message').innerHTML = 'matching';
-  } else {
-    document.getElementById('message').style.color = '#8a1253';
-    document.getElementById('message').innerHTML = 'not matching';
+
+    //enable the submit button if the email address entered by the user is valid
+    submitbtn.removeAttribute('disabled');
   }
 }
 
@@ -80,10 +93,18 @@ emailField.addEventListener('keyup', (e) => {
                 console.log('data', data);
                 if(data.email_error)
                 {
+                  //disable the submit button if the email address entered by the user is not valid
+                  submitbtn.setAttribute('disabled', 'disabled');
+                  submitbtn.disabled=true;
+
                   emailField.classList.add('is-invalid') //is-invalid is a bootstrap class that will get added if the data.username_error is True
                   //by default feedbackArea display is set to none so here we need to display feedbackArea to block to actually make it visible to user in the front-end register.html
                   emailFeedbackArea.style.display = 'block';
                   emailFeedbackArea.innerHTML = `<p>${data.email_error}</p>`
+                }
+                else {
+                  //enable the submit button if the email address entered by the user is valid
+                  submitbtn.removeAttribute('disabled');
                 }
             });   //map the response with json
   }
@@ -117,10 +138,18 @@ usernameField.addEventListener('keyup', (e) => { //(e) it is an anonymous functi
                 console.log('data', data);
                 if(data.username_error)
                 {
+                  //disable the submit button if the email address entered by the user is not valid
+                  submitbtn.setAttribute('disabled', 'disabled');
+                  submitbtn.disabled=true;
+
                   usernameField.classList.add('is-invalid') //is-invalid is a bootstrap class that will get added if the data.username_error is True
                   //by default feedbackArea display is set to none so here we need to display feedbackArea to block to actually make it visible to user in the front-end register.html
                   feedbackArea.style.display = 'block';
                   feedbackArea.innerHTML = `<p>${data.username_error}</p>`
+                }
+                else {
+                  //enable the submit button if the email address entered by the user is valid
+                  submitbtn.removeAttribute('disabled');
                 }
             });   //map the response with json
   }
