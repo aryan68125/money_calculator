@@ -1,7 +1,7 @@
 {% extends "base_auth.html" %}
 {% load static %}
 {% block content %}
-<div class="auth" >
+<!-- <div class="auth" >
 <div class="card" style = "background-color: #d5e1df;">
   <div class="auth__header text-center">
     <a href="/">
@@ -16,5 +16,34 @@
   </div>
 </div>
 </div>
+</div> -->
+
+<div class="row" >
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+    <div class="card mt-5">
+
+
+      <div class="card-body">
+        <div class="card-title py-3">
+          <img src="{% static 'images/profiles/wallet.png' %}" style="height: 100px; width: 100px;" alt="icon" />
+          <h4 style="text-align: center;">Oops! Email verification failed!</h4>
+        </div>
+
+        <form action="{% url 'register' %}" method="post">
+          {% csrf_token %}
+
+          {% include 'partials/messages.html' %}
+          <h4 style="text-align: center;">Register your account with a different email address</h4>
+
+          <input type="submit" value="Register" class="btn btn-block btn-primary submit-btn" />
+        </form>
+
+      </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4"></div>
 </div>
 {% endblock %}
