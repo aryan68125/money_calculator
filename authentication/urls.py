@@ -27,6 +27,7 @@ urlpatterns = [
     #url routes related to user registration ,login and password reset functions of the website
     path('register', views.RegistrationView.as_view() , name='register'),
     path('activate/<uidb64>/<token>', views.ActivateAccountView.as_view(), name='activate'),
+    path('success', views.SuccessView.as_view() , name='success'),
     path('login', views.LoginView.as_view() , name='login'),
 
     #url routes related to username and email validation in real time

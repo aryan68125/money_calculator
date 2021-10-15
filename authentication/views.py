@@ -183,9 +183,13 @@ class ActivateAccountView(View):
             print(f"user active stauts = {user.is_active}")
             user.save()
             messages.success(request,'account activated successfully')
-            return render(request,'authentication/success.html')
+            return redirect(request,'success')
         messages.error(request,'account activation Failed!')
         return render(request,'authentication/error.html', status=401)
+
+class SuccessView(View):
+    def get(self, request):
+        return render(request,'authentication/success.html')
 
 #JSON allows us to communicate with our font end
 #by default server will return a 200ok json response which is not ideal
