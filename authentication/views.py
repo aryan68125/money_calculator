@@ -183,7 +183,7 @@ class ActivateAccountView(View):
             user.save()
             messages.success(request,'account activated successfully')
             return redirect('login')
-        messages.error(request,'account activated Failed!')
+        messages.error(request,'account activation Failed!')
         return render(request,'authentication/error.html', status=401)
 
 #JSON allows us to communicate with our font end
