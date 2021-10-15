@@ -183,7 +183,7 @@ class ActivateAccountView(View):
             user.save()
             messages.success(request,'account activated successfully')
             return redirect('login')
-        return render(request,'users/error.html', status=401)
+        return render(request,'authentication/error.html', status=401)
 
 #JSON allows us to communicate with our font end
 #by default server will return a 200ok json response which is not ideal
