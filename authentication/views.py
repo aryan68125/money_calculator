@@ -19,6 +19,7 @@ from django.contrib import messages
 #--------------------------USER REGISTRATION, LOGIN, AUTHENTICATION,LOGOUT RELATED IMPORTS STARTS HERE----------------------------------
 #for our login page to have proper login and user authaentication process we have to make these imports below
 from django.contrib.auth import login, authenticate, logout
+from django.contrib import auth
 
 #import the built in django user model
 from django.contrib.auth.models import User
@@ -258,3 +259,31 @@ class EmailValidationView(View):
 class LoginView(View):
     def get(self, request):
         return render(request, 'authentication/login.html')
+
+    def post(self, request):
+        #pick out the data from the login.html form
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        if username and password :
+            #if username and password is not none then we will try to login this user in our website
+            user = auth.authenticate(username=username, password=password)
+
+            #user is successfully authenticated then we get the user back
+            if user:
+                if user.is_active:
+                    #if the user account is activated via email verification link then allow user to login to their account
+                    auth.login(request, user)
+                    #now we can redirect user to the home page after login
+
+                else:
+                    messages.error(request,'It looks like your account is not activated')
+                    message.warning(request,'Please check you email for activation link')
+                    return render(request, 'authentication/login.html')
+            else:
+                messages.error(request,'invalid username or password')
+                return render(request, 'authentication/login.html')
+
+        else:
+            messages.error(request,'username and password cannot be empty')
+            return render(request, 'authentication/login.html')
