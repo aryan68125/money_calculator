@@ -318,12 +318,6 @@ class LogoutView(View):
 
 #--------------reset password related views starts here-----------------
 class RequestResetEmailView(View):
-    #this dispatch function prevents logged in user from seeing reset-password page
-    def dispatch(self, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            return redirect('expenses')
-        return super().dispatch(*args, **kwargs)
-
     #here we are gonna have a from where user can supply their email address
     def get(self, request):
         return render(request, 'authentication/request-reset-email.html')
@@ -380,12 +374,6 @@ class RequestResetEmailView(View):
         return render(request, 'authentication/request-reset-email.html')
 
 class SetNewPasswordView(View):
-    #this dispatch function prevents logged in user from seeing reset-password page
-    def dispatch(self, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            return redirect('expenses')
-        return super().dispatch(*args, **kwargs)
-
     def get(self, request, uidb64, token):
         #send uidb64 and token  to the set-new-password.html via context dictionary
         context = {
