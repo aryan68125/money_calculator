@@ -22,7 +22,7 @@
           <h4 style="text-align: center;">Provide your email to reset your password</h4>
         </div>
 
-        <form action="{% url 'login' %}" method="post">
+        <form method="post">
           {% csrf_token %}
 
           {% include 'partials/messages.html' %}
