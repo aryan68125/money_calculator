@@ -28,4 +28,7 @@ urlpatterns = [
 
     #authentication app url routes
     path('authentication/', include('authentication.urls')),
+
+    #preferences app urls routes
+    path('preferences/', include('userpreferences.urls')),
 ]

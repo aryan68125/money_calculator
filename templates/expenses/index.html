@@ -1,13 +1,30 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h1>Expenses</h1>
-<ul class = "list-group">
-<li class"list-group-item">Bought Bear</li>
-<li class"list-group-item">Bought Coke</li>
-<li class"list-group-item">Bought Pen set</li>
-<li class"list-group-item">Bought Macbook Pro</li>
-<li class"list-group-item">Bought ipad air</li>
-<li class"list-group-item">Bought ipad mini</li>
-</ul>
+<style>
+.list-group {
+  list-style: none;
+  padding: 0;
+
+}
+#listItem {
+  padding: 5px 10px;
+  /* background: #a2a8d3; */
+  border: 1px solid #DDDDDD;
+}
+</style>
+<div class = "contianer">
+  <!---include the side bar navigation here from the partials folder to this page--->
+  {% include 'partials/sidebar.html' %}
+  {% include 'partials/messages.html' %}
+  <h1>Expenses</h1>
+  <ul class = "list-group">
+  <li class"list-group-item" id= "listItem" >Bought Bear</li>
+  <li class"list-group-item" id= "listItem">Bought Coke</li>
+  <li class"list-group-item" id= "listItem">Bought Pen set</li>
+  <li class"list-group-item" id= "listItem">Bought Macbook Pro</li>
+  <li class"list-group-item" id= "listItem">Bought ipad air</li>
+  <li class"list-group-item" id= "listItem">Bought ipad mini</li>
+  </ul>
+</div>
 {% endblock content %}

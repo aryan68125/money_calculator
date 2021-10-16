@@ -57,6 +57,9 @@ INSTALLED_APPS = [
 
     #add boto3 and django-storages here so that we can use amazon s3 bucket
     'storages',
+
+    #add userpreferences app in installed apps this app will keep track of user preferences
+    'userpreferences.apps.UserpreferencesConfig'
 ]
 
 MIDDLEWARE = [

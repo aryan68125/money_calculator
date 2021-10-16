@@ -1,0 +1,54 @@
+{% extends 'base_auth.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+.image-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 10%;
+}
+</style>
+<div class="row" >
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+    <div class="card mt-5">
+
+
+      <div class="card-body">
+        <div class="card-title py-3">
+          <image src = "{% static 'images/profiles/wallet.png' %}" class="image-center"></image>
+          <h4 style="text-align: center;">Provide your email to reset your password</h4>
+        </div>
+
+        <form action="{% url 'login' %}" method="post">
+          {% csrf_token %}
+
+          {% include 'partials/messages.html' %}
+
+          <div class="form-group">
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              class="form-control form-control-sm"
+              id="emailField"
+
+              value="{{fieldvalues.email}}"
+            />
+          </div>
+          <input type="submit" value="Reset password" class="btn btn-block btn-primary submit-btn" style="margin-top:15px;"/>
+        </form>
+
+      </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4"></div>
+</div>
+
+<script src="{% static 'js/register.js' %}"></script>
+
+{% endblock content %}

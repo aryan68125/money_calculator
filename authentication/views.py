@@ -63,6 +63,11 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 #this class will handle the registration of the users
 class RegistrationView(View):
+    #this dispatch function prevents logged in user from seeing registration page
+    def dispatch(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('expenses')
+        return super().dispatch(*args, **kwargs)
     def get(self, request):
         return render(request, 'authentication/register.html')
 
@@ -261,6 +266,12 @@ class EmailValidationView(View):
 
 #this class will handle the login of all the users in our website
 class LoginView(View):
+    #this dispatch function prevents logged in user from seeing login page
+    def dispatch(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('expenses')
+        return super().dispatch(*args, **kwargs)
+
     def get(self, request):
         return render(request, 'authentication/login.html')
 
@@ -279,7 +290,7 @@ class LoginView(View):
                     #if the user account is activated via email verification link then allow user to login to their account
                     auth.login(request, user)
                     #now we can redirect user to the home page after login
-                    messages.success(request,'account activated you can now login')
+                    # messages.success(request,'account activated you can now login')
                     return redirect('expenses')
                 else:
                     messages.error(request,'It looks like your account is not activated')
@@ -292,3 +303,132 @@ class LoginView(View):
         else:
             messages.error(request,'username and password cannot be empty')
             return render(request, 'authentication/login.html')
+
+class LogoutView(View):
+    def post (self, request):
+        auth.logout(request)#this will logout the user
+        return redirect('login')
+
+#--------------reset password related views starts here-----------------
+class RequestResetEmailView(View):
+    #this dispatch function prevents logged in user from seeing reset-password page
+    def dispatch(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('expenses')
+        return super().dispatch(*args, **kwargs)
+
+    #here we are gonna have a from where user can supply their email address
+    def get(self, request):
+        return render(request, 'authentication/request-reset-email.html')
+
+    #here we will handle the post request from request-reset-email.html page
+    def post(self,request):
+        email = request.POST['email']
+
+        #before we send the mail to this email address we need to check if this user even exist in our database
+        if not validate_email(email): #step1. check the email is valid or not
+            messages.add_message(request,messages.ERROR,'email address not valid!')
+            return render(request, 'users/request-reset-email.html')
+
+        user = User.objects.filter(email=email) #this will find the user having the email address entered in the provide email section of the reset passsword html page
+        if user.exists():
+            # this will return true if the user is already in our website's database
+            #send the verification link to the user's email address
+            #step1. construct a url that is unique to the application that we've built so we need the the current domain that our application is running on
+            #       and we will set it dynamically we can import this:- from django.contrib.sites.shortcuts import get_current_site
+            current_site = get_current_site(request) #get_current_site(request) will give us the current domain of our website dinamically
+            #step2. create an email subject
+            email_subject= 'Reset password'
+
+            #step3. construct a message
+            # so inorder to do that you need to import :- from django.template.loader import render_to_string this library renders a template with a context automatically
+            #convert the user.pk into bytes so we need to import:- from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
+            #import a module that generated a unique token for our application when we need to verify the user's email address :- from django.contrib.auth.tokens import PasswordResetTokenGenerator it can be used to activate accounts and to reset password
+            create_a_context_for_front_end={
+                'user':user,
+                'domain':current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user[0].pk)),
+                'token': PasswordResetTokenGenerator().make_token(user[0]), #here we won't use the utils.py file to generate a token here we will use an inbuilt class to generate a token to set a new password
+            }
+            message = render_to_string('users/reset-user-password.html',create_a_context_for_front_end)
+            #step4. send an email for authentation of the account import :- from django.core.mail import EmailMessage and import settings :- from django.conf import settings
+            '''
+            email_message = EmailMessage(
+               email_subject,            #subject of the email
+               message,                  #message that you want to send via email
+               settings.EMAIL_HOST_USER, #EMAIL_HOST = 'smtp.gmail.com' that is being imported from the settings.py of the django project
+               [email],                  #email adderess entered by the user in the regitration form in the front end of the application of the django project
+            )
+            '''
+            email_message = EmailMessage(
+               email_subject,
+               message,
+               settings.EMAIL_HOST_USER,
+               [email],
+            )
+            email_message.send()
+
+
+        messages.add_message(request,messages.SUCCESS,'email reset link has been sent to your email address')
+        return render(request, 'users/request-reset-email.html')
+
+class SetNewPasswordView(View):
+    def get(self, request, uidb64, token):
+        #send uidb64 and token  to the set-new-password.html via context dictionary
+        context = {
+            'uidb64':uidb64,
+            'token':token,
+        }
+
+        #prevent user from using the same token that was sent in the email of the user to reset the password
+        try:
+            user_id = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=user_id)
+            if not PasswordResetTokenGenerator().check_token(user, token): #if this returns false then the link is already used to reset the password
+                messages.add_message(request,messages.ERROR,'Password reset link expired')
+                return redirect('login')
+
+        except DjangoUnicodeDecodeError as identifier:
+            messages.add_message(request,messages.INFO,'Oops something went wrong!')
+            return render(request, 'authentication/set-new-password.html',context)
+
+        return render(request, 'authentication/set-new-password.html', context)
+
+    #handeling the post requests
+    def post(self, request, uidb64, token):
+        #send uidb64 and token  to the set-new-password.html via context dictionary
+        context = {
+            'uidb64':uidb64,
+            'token':token,
+            'has_error': False,
+        }
+
+        #check the password
+        password1 = request.POST.get('password_1')
+        password2 = request.POST.get('password_2')
+        if len(password1) < 6:
+            messages.add_message(request,messages.ERROR,'password must be atleast 6 characters long')
+            context['has_error'] = True
+        if password1 != password2:
+            messages.add_message(request,messages.ERROR,'password do not match')
+            context['has_error'] = True
+        if context['has_error'] == True:
+            return render(request, 'authentication/set-new-password.html',context)
+
+        #if the user entered the correct password then we are going to proceed with setting the new password for the user account
+        try:
+            user_id = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=user_id)
+            user.set_password(password1)
+            user.save()
+            messages.add_message(request,messages.SUCCESS,'password changed successfully')
+            return redirect('login')
+        except DjangoUnicodeDecodeError as identifier:
+            messages.add_message(request,messages.INFO,'Oops something went wrong!')
+            return render(request, 'authentication/set-new-password.html',context)
+
+        return render(request, 'authentication/set-new-password.html',context)
+
+
+
+#-------------------------USER Registration, EMAIL VERIFICATION , LOGIN AND LOGOUT FUNCTIONALITY ENDS HERE--------------------------------
