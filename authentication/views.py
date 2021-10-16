@@ -68,6 +68,7 @@ class RegistrationView(View):
         if self.request.user.is_authenticated:
             return redirect('expenses')
         return super().dispatch(*args, **kwargs)
+
     def get(self, request):
         return render(request, 'authentication/register.html')
 
@@ -193,6 +194,12 @@ class ActivateAccountView(View):
         return render(request,'authentication/error.html', status=401)
 
 class SuccessView(View):
+    #this dispatch function prevents logged in user from seeing reset-password page
+    def dispatch(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('expenses')
+        return super().dispatch(*args, **kwargs)
+
     def get(self, request):
         return render(request,'authentication/success.html')
 
@@ -328,7 +335,7 @@ class RequestResetEmailView(View):
         #before we send the mail to this email address we need to check if this user even exist in our database
         if not validate_email(email): #step1. check the email is valid or not
             messages.add_message(request,messages.ERROR,'email address not valid!')
-            return render(request, 'users/request-reset-email.html')
+            return render(request, 'authentication/request-reset-email.html')
 
         user = User.objects.filter(email=email) #this will find the user having the email address entered in the provide email section of the reset passsword html page
         if user.exists():
@@ -350,7 +357,7 @@ class RequestResetEmailView(View):
                 'uid': urlsafe_base64_encode(force_bytes(user[0].pk)),
                 'token': PasswordResetTokenGenerator().make_token(user[0]), #here we won't use the utils.py file to generate a token here we will use an inbuilt class to generate a token to set a new password
             }
-            message = render_to_string('users/reset-user-password.html',create_a_context_for_front_end)
+            message = render_to_string('authentication/reset-user-password.html',create_a_context_for_front_end)
             #step4. send an email for authentation of the account import :- from django.core.mail import EmailMessage and import settings :- from django.conf import settings
             '''
             email_message = EmailMessage(
@@ -370,9 +377,15 @@ class RequestResetEmailView(View):
 
 
         messages.add_message(request,messages.SUCCESS,'email reset link has been sent to your email address')
-        return render(request, 'users/request-reset-email.html')
+        return render(request, 'authentication/request-reset-email.html')
 
 class SetNewPasswordView(View):
+    #this dispatch function prevents logged in user from seeing reset-password page
+    def dispatch(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('expenses')
+        return super().dispatch(*args, **kwargs)
+
     def get(self, request, uidb64, token):
         #send uidb64 and token  to the set-new-password.html via context dictionary
         context = {
