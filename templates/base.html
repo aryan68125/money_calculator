@@ -65,6 +65,13 @@
   background-color: #555555;
   color: white;
 }
+.image-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 3%;
+  padding: 0.5em;
+}
 </style>
 <html lang="en">
   <head>
@@ -98,7 +105,8 @@
   <body>
 
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Aditya Industries</a>
+  <!-- <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Aditya Industries</a> -->
+  <image src = "{% static 'images/profiles/wallet.png' %}" class="image-center"></image>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
