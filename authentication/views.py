@@ -430,6 +430,4 @@ class SetNewPasswordView(View):
 
         return render(request, 'authentication/set-new-password.html',context)
 
-
-
 #-------------------------USER Registration, EMAIL VERIFICATION , LOGIN AND LOGOUT FUNCTIONALITY ENDS HERE--------------------------------

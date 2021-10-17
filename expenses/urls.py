@@ -22,4 +22,9 @@ urlpatterns = [
 
     path('', views.index , name='expenses'),
     path('add-expense/', views.add_expense , name='add-expense'),
+    path('edit-expense/<int:id>', views.expense_edit , name='expense_edit'),
+    path('delete-expense/<int:id>/', views.expense_delete , name='expense_delete'),
+
+    #this route will restrict un authorized users from viewing pages in the website
+    path('login_required/', views.login_required_function , name='login_required_exp'),
 ]

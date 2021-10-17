@@ -6,14 +6,14 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="{% url 'expenses' %}">Expenses</a></li>
-      <li class="breadcrumb-item"><a href="#">Add expenses</a></li>
+      <li class="breadcrumb-item"><a href="#">Edit expenses</a></li>
     </ol>
   </nav>
-  <h1>Add expense</h1>
+  <h1>Edit expense</h1>
 
     <div class="card">
        <div class="card-body">
-       <form action = "{% url 'add-expense' %}" method="post">
+       <form action = "{% url 'expense_edit' expense.id %}" method="post">
          <!---show messages in this page--->
          {% include 'partials/messages.html' %}
          {% csrf_token %}
@@ -30,7 +30,7 @@
          <div class="form-control mt-2">
            <label>Category</label>
            <select name = "category" class="form-control">
-             <option selected name = "category" value="{{values.category}}">{{values.category}}</option>
+            <option selected name = "category" value="{{values.category}}">{{values.category}}</option>
             {% for category in categories %}
                 <option name = "category" value="{{category.name}}">{{category.name}}</option>
             {% endfor %}
@@ -39,10 +39,10 @@
 
          <div class="form-group mt-2">
            <label>Date of expense</label>
-           <input class="form-control form-control-sm" type="date" name = "expense_date" value = "{{values.expense_date}}"/>
+           <input class="form-control form-control-sm" type="date" name = "expense_date" value = "{{values.date}}"/>
          </div>
          <!---submit button--->
-         <input type="submit" value = "Add" class = "btn btn-primary mt-5"/>
+         <input type="submit" value = "Update" class = "btn btn-primary mt-5"/>
        </form>
        </div>
     </div>

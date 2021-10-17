@@ -2,15 +2,22 @@
 {% load static %}
 {% block content %}
 <div class="container mt-10">
-  <h5 style = "margin-top:15px;">Prefered currency</h5>
+  <h5 style = "margin-top:15px;">Preferred currency</h5>
   <hr/>
     {% include 'partials/messages.html' %}
 <form method="post" action="{% url 'preferences' %}">
-  {% csrf_token % }
+  {% csrf_token %}
   <div class="input-group">
-    <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-      {% for currency in currency_data %}
-          <option value="1">{{currency.name}} -- {{currency.value}}</option>
+          <select name="currency" class="form-select" id="inputGroupSelect04">
+            {% if user_preferences.currency%}
+            <option name="currency" selected value="{{user_preferences.currency}}"
+              >{{user_preferences.currency}}</option
+            >
+            {% endif %} {% for currency in currencies %}
+
+            <option name="currency" value="{{currency.name}} - {{currency.value}}"
+              >{{currency.name}} - {{currency.value}}
+            </option>
       {% endfor %}
     </select>
     <input class="btn btn-outline-secondary" type="submit" value = "Save" />

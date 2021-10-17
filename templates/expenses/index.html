@@ -13,18 +13,79 @@
   border: 1px solid #DDDDDD;
 }
 </style>
-<div class = "contianer">
-  <!---include the side bar navigation here from the partials folder to this page--->
-  {% include 'partials/sidebar.html' %}
-  {% include 'partials/messages.html' %}
-  <h1>Expenses</h1>
-  <ul class = "list-group">
-  <li class"list-group-item" id= "listItem" >Bought Bear</li>
-  <li class"list-group-item" id= "listItem">Bought Coke</li>
-  <li class"list-group-item" id= "listItem">Bought Pen set</li>
-  <li class"list-group-item" id= "listItem">Bought Macbook Pro</li>
-  <li class"list-group-item" id= "listItem">Bought ipad air</li>
-  <li class"list-group-item" id= "listItem">Bought ipad mini</li>
-  </ul>
+
+{% include 'partials/messages.html' %}
+
+<div class="container">
+  <div class = "contianer md-5">
+    <!---include the side bar navigation here from the partials folder to this page--->
+    {% include 'partials/sidebar.html' %}
+    <div class="row" style="margin-top:15px;">
+      <!---add a bootstrap breadcrum that will tell us where we are in the website expenses home page--->
+      <div class = "col-md-10">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="">Expenses</a></li>
+            <li class="breadcrumb-item"><a href="#">My expenses</a></li>
+          </ol>
+        </nav>
+      </div>
+
+      <div class="col-md-2">
+        <a href="{% url 'add-expense'%}" class="btn btn-primary">Add expense</a>
+      </div>
+    </div>
+  </div>
+
+  <!---check if the user has expenses or not if yest then only show the table--->
+  {% if expenses.count %}
+  <table class = "table table-stripped table-hover">
+    <!---table head--->
+    <thead>
+      <tr>
+        <th>Amount (Currency)</th>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th></th> <!---this will hold the edit buttons for our expenses--->
+        <th></th> <!---this will hold the delete buttons for our expenses--->
+      </tr>
+    </thead>
+    <!---table body--->
+    <tbody>
+      <!---instead of looping through the expenses here we should loop through the page_obj
+      which will give the number of expenses defined in the paginator class per page--->
+      {% for expense in page_obj %}
+      <tr>
+        <td>{{expense.amount}}</td>
+        <td>{{expense.category}}</td>
+        <td>{{expense.description}}</td>
+        <td>{{expense.date}}</td>
+        <td><a href="{% url 'expense_edit' expense.id %}" class = "btn btn-primary">Edit</a></td><!---this will hold the edit buttons for our expenses--->
+        <td><a href="{% url 'expense_delete' expense.id %}" class = "btn btn-danger">Delete</a></td><!---this will hold the edit buttons for our expenses--->
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+      <div class="">
+        Showing page {{page_obj.number}} of {{ page_obj.paginator.num_pages }}
+      </div>
+
+      <div class ="float-right">
+        <ul class="pagination align-right float-right mr-auto">
+          {% if page_obj.has_previous %}
+          <li {% if page_obj.number == 1 %} class="page-item active" {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
+          <li class="page-item"> <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+          {% endif %}
+
+          {% if page_obj.has_next %}
+          <li class="page-item"> <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+          <li class="page-item"> <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages}} &raquo;</a></li>
+          {% endif %}
+          </ul>
+      </div>
+
+  {% endif %}
 </div>
 {% endblock content %}

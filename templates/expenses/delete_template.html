@@ -1,0 +1,77 @@
+{% extends "base_auth.html" %}
+{% load static %}
+{% block content %}
+
+<style>
+.image-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 10%;
+}
+</style>
+
+<div class="row" >
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+    <div class="card mt-5">
+
+
+      <div class="card-body">
+        <div class="card-title py-3">
+          <img src="{% static 'images/profiles/wallet.png' %}" class="image-center" />
+          <h4 style="text-align: center;">Are you sure you want to delete {{expense.description}} ?</h4>
+
+          <div class="container">
+            <!---check if the user has expenses or not if yest then only show the table--->
+            <table class = "table table-stripped table-hover">
+              <!---table head--->
+              <thead>
+                <tr>
+                  <th>Amount (Currency)</th>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <!---table body--->
+              <tbody>
+                <tr>
+                  <td>{{expense.amount}}</td>
+                  <td>{{expense.category}}</td>
+                  <td>{{expense.description}}</td>
+                  <td>{{expense.date}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="container">
+              <table class = "">
+                <!---table head--->
+                <thead>
+                  <tr>
+                    <th>
+                       <a href="{% url 'expenses' %}" class = "btn btn-primary">No</a>
+                    </th>
+                    <th>
+                       <form class="" method="POST" action="" style="margin-top:15px;">
+                         {% csrf_token %}
+                            <input class="btn btn-danger" type="submit" value="Confirm"/>
+                       </form>
+                    </th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4"></div>
+</div>
+{% endblock %}
