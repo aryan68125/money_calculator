@@ -18,12 +18,20 @@ to this 'exaple url = path('', TaskList.as_view(), name='tasks'),'
 view by default looks for pk value
 path('task/<int:pk>/', TaskDetail.as_view(), name='tasks'),
 '''
+#here use a decorateor that will allow su to use pi calls to validate username
+from django.views.decorators.csrf import csrf_exempt
+
 urlpatterns = [
 
     path('', views.index , name='expenses'),
+
+    #CRUD for expenses
     path('add-expense/', views.add_expense , name='add-expense'),
     path('edit-expense/<int:id>', views.expense_edit , name='expense_edit'),
     path('delete-expense/<int:id>/', views.expense_delete , name='expense_delete'),
+
+    #this url route is required by our searchExpense.js file in the static folder so that we can search for the expenses
+    path('search-expenses', csrf_exempt(views.search_expenses) , name='search_expenses'),
 
     #this route will restrict un authorized users from viewing pages in the website
     path('login_required/', views.login_required_function , name='login_required_exp'),

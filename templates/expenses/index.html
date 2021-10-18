@@ -39,53 +39,96 @@
 
   <!---check if the user has expenses or not if yest then only show the table--->
   {% if expenses.count %}
-  <table class = "table table-stripped table-hover">
-    <!---table head--->
-    <thead>
-      <tr>
-        <th>Amount (Currency)</th>
-        <th>Category</th>
-        <th>Description</th>
-        <th>Date</th>
-        <th></th> <!---this will hold the edit buttons for our expenses--->
-        <th></th> <!---this will hold the delete buttons for our expenses--->
-      </tr>
-    </thead>
-    <!---table body--->
-    <tbody>
-      <!---instead of looping through the expenses here we should loop through the page_obj
-      which will give the number of expenses defined in the paginator class per page--->
-      {% for expense in page_obj %}
-      <tr>
-        <td>{{expense.amount}}</td>
-        <td>{{expense.category}}</td>
-        <td>{{expense.description}}</td>
-        <td>{{expense.date}}</td>
-        <td><a href="{% url 'expense_edit' expense.id %}" class = "btn btn-primary">Edit</a></td><!---this will hold the edit buttons for our expenses--->
-        <td><a href="{% url 'expense_delete' expense.id %}" class = "btn btn-danger">Delete</a></td><!---this will hold the edit buttons for our expenses--->
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <!---searching expenses and showing it in this table format--->
+  <div class="row mt-5">
+    <div class="col-md-8">
+      <p class = "noResult" style="display: none;">no result found</p>
+    </div>
 
-      <div class="">
-        Showing page {{page_obj.number}} of {{ page_obj.paginator.num_pages }}
+    <!---search field--->
+    <div class="col-md-4">
+      <div class="form-group">
+          <input class"form-control" type="text" id="searchField" placeholder="search"/>
       </div>
+    </div>
+  </div>
 
-      <div class ="float-right">
-        <ul class="pagination align-right float-right mr-auto">
-          {% if page_obj.has_previous %}
-          <li {% if page_obj.number == 1 %} class="page-item active" {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
-          <li class="page-item"> <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-          {% endif %}
+  <div class = "default-table">
 
-          {% if page_obj.has_next %}
-          <li class="page-item"> <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
-          <li class="page-item"> <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages}} &raquo;</a></li>
-          {% endif %}
-          </ul>
-      </div>
+    <table class = "table table-stripped table-hover">
+      <!---table head--->
+      <thead>
+        <tr>
+          <th>Amount ({{currency}})</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Date</th>
+          <th></th> <!---this will hold the edit buttons for our expenses--->
+          <th></th> <!---this will hold the delete buttons for our expenses--->
+        </tr>
+      </thead>
+      <!---table body--->
+      <tbody>
+        <!---instead of looping through the expenses here we should loop through the page_obj
+        which will give the number of expenses defined in the paginator class per page--->
+        {% for expense in page_obj %}
+        <tr>
+          <td>{{expense.amount}}</td>
+          <td>{{expense.category}}</td>
+          <td>{{expense.description}}</td>
+          <td>{{expense.date}}</td>
+          <td><a href="{% url 'expense_edit' expense.id %}" class = "btn btn-primary">Edit</a></td><!---this will hold the edit buttons for our expenses--->
+          <td><a href="{% url 'expense_delete' expense.id %}" class = "btn btn-danger">Delete</a></td><!---this will hold the edit buttons for our expenses--->
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+
+  <!---output area for when the search resulf is none--->
+  <div class="table-output">
+    <table class = "table table-stripped table-hover">
+      <!---table head--->
+      <thead>
+        <tr>
+          <th>Amount ({{currency}})</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Date</th>
+          <th></th> <!---this will hold the edit buttons for our expenses--->
+          <th></th> <!---this will hold the delete buttons for our expenses--->
+        </tr>
+      </thead>
+      <!---table body--->
+      <tbody class= "table-body">
+          <!---show the contents of the search result in the table dynamically--->
+      </tbody>
+    </table>
+  </div>
+
+<div class = 'pagination-container'>
+  <div class="">
+    Showing page {{page_obj.number}} of {{ page_obj.paginator.num_pages }}
+  </div>
+
+  <div class ="float-right">
+    <ul class="pagination align-right float-right mr-auto">
+      {% if page_obj.has_previous %}
+      <li {% if page_obj.number == 1 %} class="page-item active" {% endif %}><a class="page-link" href="?page=1">&laquo; 1</a></li>
+      <li class="page-item"> <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+      {% endif %}
+
+      {% if page_obj.has_next %}
+      <li class="page-item"> <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+      <li class="page-item"> <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages}} &raquo;</a></li>
+      {% endif %}
+      </ul>
+  </div>
+</div>
 
   {% endif %}
 </div>
+
+<script src="{% static 'js/searchExpenses.js' %}"></script>
 {% endblock content %}

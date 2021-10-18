@@ -12,6 +12,15 @@ from django.contrib.auth.models import User
 #this paginator import will allow us to show 5 expenses per page in the main home page that shows all the expenses of the user
 from django.core.paginator import Paginator
 
+#to implement search in realtime we will import JSON
+import json
+
+#this will allow us to send in a json back
+from django.http import JsonResponse
+
+#import the UserPreferences model from userPreferences application
+from userpreferences.models import UserPreferences
+
 #login_required decorator will not allow any user that is not logged in this website
 @login_required(login_url='login_required_exp')
 def index(request):
@@ -21,17 +30,42 @@ def index(request):
 
     #paginate the expenses table so it do not take to much space in the ui space in the home page
     #here we are providing the Paginator(the data that we want to paginate, number of data set per page in integers)
-    paginator = Paginator(expenses, 2)
+    paginator = Paginator(expenses, 5)
     page_number = request.GET.get('page') #this gonna be picking value of a page from the url and return it
     #now we need to construct a page object
     #now a page object represents the expenses we will se on those individual pages
     page_obj = Paginator.get_page(paginator,page_number)
 
+    #query the database currency of the user
+    currency = UserPreferences.objects.get(user=request.user).currency
+
     stuff_for_frontend = {
           'expenses':expenses,
           'page_obj': page_obj,
+          'currency':currency,
     }
     return render(request, 'expenses/index.html', stuff_for_frontend)
+
+#this function will search expenses from the list of expenses
+def search_expenses(request):
+    if request.method == 'POST':
+        #get everything that the user will be sending in the search form
+        #so here we will get the JSON over the network so that we can search for expenses in realtime
+        search_str = json.loads(request.body).get('searchText') #the user is sending in a json when searching for expenses in the search field
+        #now whatever we are sending in the network we need to convert it into a python dictionary
+
+        #now we will query our expenses model
+        #amount__starts_with=search_str will allow us to search for expenses in the models database via amount attribute
+        #here we will also restrict user from searching other's expenses
+        #this will contain the query sets
+        expenses = Expense.objects.filter(amount__icontains=search_str,
+            owner=request.user) | Expense.objects.filter(date__icontains=search_str,
+            owner=request.user) | Expense.objects.filter(description__icontains=search_str,
+            owner=request.user) | Expense.objects.filter(category__icontains=search_str,
+            owner=request.user)
+        data = expenses.values()
+        #since we are passing a list and not a dictionary this can fail to be serialize so pass safe = False
+        return JsonResponse(list(data), safe=False)
 
 #this fumction will handle the addition of new expense in our application
 #login_required decorator will not allow any user that is not logged in this website

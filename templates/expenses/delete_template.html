@@ -50,7 +50,7 @@
                 <thead>
                   <tr>
                     <th>
-                       <a href="{% url 'expenses' %}" class = "btn btn-primary">No</a>
+                       <button href="" onclick="goBack()" class = "btn btn-primary">No</button>
                     </th>
                     <th>
                        <form class="" method="POST" action="" style="margin-top:15px;">
@@ -74,4 +74,10 @@
   </div>
   <div class="col-md-4"></div>
 </div>
+
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
 {% endblock %}

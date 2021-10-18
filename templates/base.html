@@ -107,17 +107,24 @@
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
   <!-- <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Aditya Industries</a> -->
   <image src = "{% static 'images/profiles/wallet.png' %}" class="image-center"></image>
+  <!---sidebar toggle menu--->
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
-  </button>
-  <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
-  <div class="navbar-nav">
-    <div class="nav-item text-nowrap">
+  </button> <!---sidebar toggle menu--->
+
+  <div class="navbar-nav px-3" style ="display: flex; flex-direction: row; align-item: center;">
+    <!---logout form--->
+    <div class="nav-item text-nowrap mt-3">
+          <a class ="nav-link" href="#">[{{request.user.username}}]</a>
+    </div>
+
+    <div class="nav-item text-nowrap" style="margin-left: 10px;">
       <form action = "{% url 'logout' %}" method="post" style ="padding-top :8px; padding-left :5px;">
         {% csrf_token %}
         <input class="text text-capitalize button button2" type = "submit" value="Sign out"/>
       </form>
-    </div>
+    </div><!---logout form--->
+
   </div>
 </header>
 

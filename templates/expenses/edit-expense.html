@@ -39,7 +39,10 @@
 
          <div class="form-group mt-2">
            <label>Date of expense</label>
-           <input class="form-control form-control-sm" type="date" name = "expense_date" value = "{{values.date}}"/>
+           <!---{{values.date|date:'Y-m-d'}} will allow you to show the date that is already present in the databased date attribute of your model
+            but before you do that go ahead and check views.py of this app and also reference models.py of this app before trying to implement this
+           --->
+           <input class="form-control form-control-sm" type="date" name = "expense_date" value = "{{values.date|date:'Y-m-d'}}"/>
          </div>
          <!---submit button--->
          <input type="submit" value = "Update" class = "btn btn-primary mt-5"/>
