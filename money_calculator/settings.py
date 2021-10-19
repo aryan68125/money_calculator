@@ -51,6 +51,9 @@ INSTALLED_APPS = [
     #register your expenses app
     'expenses.apps.ExpensesConfig',
 
+    #register your UserIncome app
+    'userincome.apps.UserincomeConfig',
+
     #django website api section
     #django cleanup will delete any static files images when the model is deleted
     'django_cleanup.apps.CleanupConfig',

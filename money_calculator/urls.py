@@ -26,6 +26,9 @@ urlpatterns = [
     #expenses apps url routes
     path('', include('expenses.urls')),
 
+    #income app urls routes
+    path('income/', include('userincome.urls')),
+
     #authentication app url routes
     path('authentication/', include('authentication.urls')),
 

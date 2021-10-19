@@ -34,7 +34,7 @@ searchField.addEventListener('keyup' , (e) =>{
     //it allows you to do things that you did in the Postman
     //fetch('url') url will be a dynamic url sincs i am already in the application i.e this javascript is running on the same server
     //sincs it is going to be a post request we are going to specify the things we are going to send to the (front-end)
-    fetch('/search-expenses',{
+    fetch('/income/search-income',{
       //we are required to send a body to the frontend and a body requires a key and a value
       //manually String a file when using fetch
       body: JSON.stringify({searchText: searchValue}),
@@ -62,7 +62,7 @@ searchField.addEventListener('keyup' , (e) =>{
             `
                <tr>
                <td>${item.amount}</td>
-               <td>${item.category}</td>
+               <td>${item.source}</td>
                <td>${item.description}</td>
                <td>${item.date}</td>
                </tr>

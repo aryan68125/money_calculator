@@ -25,20 +25,20 @@
       <div class = "col-md-10">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="">Expenses</a></li>
-            <li class="breadcrumb-item"><a href="#">My expenses</a></li>
+            <li class="breadcrumb-item"><a href="">Income</a></li>
+            <li class="breadcrumb-item"><a href="#">My Income</a></li>
           </ol>
         </nav>
       </div>
 
       <div class="col-md-2">
-        <a href="{% url 'add-expense'%}" class="btn btn-primary">Add expense</a>
+        <a href="{% url 'add_income'%}" class="btn btn-primary">Add Income</a>
       </div>
     </div>
   </div>
 
   <!---check if the user has expenses or not if yest then only show the table--->
-  {% if expenses.count %}
+  {% if income.count %}
   <!---searching expenses and showing it in this table format--->
   <div class="row mt-5">
     <div class="col-md-8">
@@ -60,7 +60,7 @@
       <thead>
         <tr>
           <th>Amount ({{currency}})</th>
-          <th>Category</th>
+          <th>Source</th>
           <th>Description</th>
           <th>Date</th>
           <th></th> <!---this will hold the edit buttons for our expenses--->
@@ -71,14 +71,16 @@
       <tbody>
         <!---instead of looping through the expenses here we should loop through the page_obj
         which will give the number of expenses defined in the paginator class per page--->
-        {% for expense in page_obj %}
+        {% for income in page_obj %}
         <tr>
-          <td>{{expense.amount}}</td>
-          <td>{{expense.category}}</td>
-          <td>{{expense.description}}</td>
-          <td>{{expense.date}}</td>
-          <td><a href="{% url 'expense_edit' expense.id %}" class = "btn btn-primary">Edit</a></td><!---this will hold the edit buttons for our expenses--->
-          <td><a href="{% url 'expense_delete' expense.id %}" class = "btn btn-danger">Delete</a></td><!---this will hold the edit buttons for our expenses--->
+          <td>{{income.amount}}</td>
+          <td>{{income.source}}</td>
+          <td>{{income.description}}</td>
+          <td>{{income.date}}</td>
+          <!--- url 'income_edit' income.id--->
+          <td><a href="{%url 'income_edit' income.id%}" class = "btn btn-primary">Edit</a></td><!---this will hold the edit buttons for our expenses--->
+          <!--- url 'income_delete' income.id--->
+          <td><a href="{%url 'income_delete' income.id%}" class = "btn btn-danger">Delete</a></td><!---this will hold the edit buttons for our expenses--->
         </tr>
         {% endfor %}
       </tbody>
@@ -93,7 +95,7 @@
       <thead>
         <tr>
           <th>Amount ({{currency}})</th>
-          <th>Category</th>
+          <th>Source</th>
           <th>Description</th>
           <th>Date</th>
           <th></th> <!---this will hold the edit buttons for our expenses--->
@@ -130,5 +132,5 @@
   {% endif %}
 </div>
 
-<script src="{% static 'js/searchExpenses.js' %}"></script>
+<script src="{% static 'js/searchIncome.js' %}"></script>
 {% endblock content %}

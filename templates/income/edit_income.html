@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!---add a bootstrap breadcrum that will tell us where we are in the website expenses home page--->
+<div class="container mt-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'income' %}">Income</a></li>
+      <li class="breadcrumb-item"><a href="#">Edit Income</a></li>
+    </ol>
+  </nav>
+  <h1>Edit Income</h1>
+
+    <div class="card">
+       <div class="card-body">
+       <form action = "{% url 'income_edit' incomes.id %}" method="post">
+         <!---show messages in this page--->
+         {% include 'partials/messages.html' %}
+         {% csrf_token %}
+         <div class="form-group mt-2">
+           <label>Amount</label>
+           <input class="form-control form-control-sm" type="number" name = "amount" value = "{{values.amount}}"/>
+         </div>
+
+         <div class="form-group mt-2">
+           <label>description</label>
+           <input class="form-control" type="text" name = "description" value = "{{values.description}}"/>
+         </div>
+
+         <div class="form-control mt-2">
+           <label>Source</label>
+           <select name = "source" class="form-control">
+            <option selected name = "source" value="{{values.source}}">{{values.source}}</option>
+            {% for source in sources %}
+                <option name = "source" value="{{source.name}}">{{source.name}}</option>
+            {% endfor %}
+           </select>
+         </div>
+
+         <div class="form-group mt-2">
+           <label>Date of income</label>
+           <!---{{values.date|date:'Y-m-d'}} will allow you to show the date that is already present in the databased date attribute of your model
+            but before you do that go ahead and check views.py of this app and also reference models.py of this app before trying to implement this
+           --->
+           <input class="form-control form-control-sm" type="date" name = "income_date" value = "{{values.date|date:'Y-m-d'}}"/>
+         </div>
+         <!---submit button--->
+         <input type="submit" value = "Update" class = "btn btn-primary mt-5"/>
+       </form>
+       </div>
+    </div>
+
+</div>
+{% endblock content %}
