@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+.list-group {
+  list-style: none;
+  padding: 0;
+
+}
+#listItem {
+  padding: 5px 10px;
+  /* background: #a2a8d3; */
+  border: 1px solid #DDDDDD;
+}
+</style>
+
+{% include 'partials/messages.html' %}
+
+<div class="container">
+  <div class = "contianer md-5">
+    <!---include the side bar navigation here from the partials folder to this page--->
+    {% include 'partials/sidebar.html' %}
+    <div class="row" style="margin-top:15px;">
+      <!---add a bootstrap breadcrum that will tell us where we are in the website expenses home page--->
+      <div class = "col-md-10">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'income' %}">Income</a></li>
+            <li class="breadcrumb-item"><a href="#">Income Summary</a></li>
+          </ol>
+        </nav>
+      </div>
+
+      <div class="col-md-2">
+        <a href="" class="btn btn-primary" style="display: none">Refresh Summary</a>
+      </div>
+
+      <div class="col-md-2">
+        <button href="" id="pastOneMonth" class="btn btn-primary">Past one month</button>
+      </div>
+
+      <div class="col-md-2">
+        <button href="" id="pastSixMonths" class="btn btn-primary">Past 6 months</button>
+      </div>
+
+      <div class="col-md-2">
+        <button href="" id="pastTwelveMonths" class="btn btn-primary">Past 12 months</button>
+      </div>
+
+      <h1 id="myChart_title" style="text-align:center; margin-top:45px;">Past 1 month</h1>
+      <canvas id="myChart" width="50" height="50"></canvas>
+
+      <h1 id="myChart2_title" style="text-align:center; margin-top:45px;">Past 6 months</h1>
+      <canvas id="myChart2" width="50" height="50"></canvas>
+
+      <h1 id="myChart3_title" style="text-align:center; margin-top:45px;">Past 12 months</h1>
+      <canvas id="myChart3" width="50" height="50"></canvas>
+
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/income_stats.js' %}"></script>
+<script src="{% static 'js/income_stats2.js' %}"></script>
+<script src="{% static 'js/income_stats3.js' %}"></script>
+<script src="{% static 'js/income_ChartSelect.js' %}"></script>
+{% endblock content %}

@@ -21,6 +21,9 @@ from django.http import JsonResponse
 #import the UserPreferences model from userPreferences application
 from userpreferences.models import UserPreferences
 
+#this will allow us to use date and time functions in our views.py
+import datetime
+
 #login_required decorator will not allow any user that is not logged in this website
 @login_required(login_url='login_required_exp')
 def index(request):
@@ -194,3 +197,139 @@ def expense_delete(request, id):
 
 def login_required_function(request):
     return render(request, 'authentication/login_required.html')
+
+#this function will sct as an endpoint for our javascript
+#this is weponsible for feeding our charts the data which will be used to acreate an expense chart for the past 6 months or past 1 month or pas week etc...
+def expense_catagory_summary(request): # this function is for expenses summary for past one month
+    #first of all we need to know the date that it was 1 month ago
+    #for us todo that import datetime
+    #get the date which is today
+    #for us to know what date it was 1 months ago we need to use time delta function
+    #what timedelta does that it takes in the days
+    todays_date = datetime.date.today()
+    one_month_ago = todays_date - datetime.timedelta(days=30)
+    #so here we are querying the expenses that has the date greater than or equal to one_month_ago date and date that is less thank or equal to todays_date
+    #this will give us the expenses that is between the todays_date and one_month_ago dates from the database
+    expenses = Expense.objects.filter(owner = request.user ,date__gte = one_month_ago, date__lte=todays_date)
+
+    #now construct the final representation of the data that we are getting in
+    finalrep = {}
+
+    #get all the cataogries that exists in the database
+    #I am going to create a helper function todo that
+    #it will take in an expense and then it will return for me the catagory of that expense
+    def get_catagory(expense):
+        return expense.category
+
+    #no that I have this helper function I am going to call this function for every expense that I have in the database when I am getting the data about expenses in the expense database
+    #now the way map works is I am going to give irt a function here in this case it will be get_catagory and expenses
+    #so map will be calling the get_catagory function for each expenses it will return a list that will contain catagories for each of the expenses
+    #set will remove all the duplicates in this result returned by the map if any
+    catagory_list = list(set(map(get_catagory, expenses)))
+
+    def get_expense_catagory_amount(category):
+        amount=0
+        filtered_by_catagory=expenses.filter(category=category)
+
+        for item in filtered_by_catagory:
+            amount+=item.amount
+        return amount
+
+    for x in expenses:
+        for y in catagory_list:
+            # [y] is the key for the finalrep dictionary
+            # get_expense_catagory_amount(y) is a value
+            finalrep[y]=get_expense_catagory_amount(y)
+
+    return JsonResponse({'expense_catagory_data':finalrep}, safe=False)
+
+#this function is for expenses summary for past 6 months
+def summary_past_six_months(request):
+        #first of all we need to know the date that it was 1 month ago
+        #for us todo that import datetime
+        #get the date which is today
+        #for us to know what date it was 1 months ago we need to use time delta function
+        #what timedelta does that it takes in the days
+        todays_date = datetime.date.today()
+        six_months_ago = todays_date - datetime.timedelta(days=180)
+        #so here we are querying the expenses that has the date greater than or equal to one_month_ago date and date that is less thank or equal to todays_date
+        #this will give us the expenses that is between the todays_date and one_month_ago dates from the database
+        expenses = Expense.objects.filter(owner = request.user ,date__gte = six_months_ago, date__lte=todays_date)
+
+        #now construct the final representation of the data that we are getting in
+        finalrep = {}
+
+        #get all the cataogries that exists in the database
+        #I am going to create a helper function todo that
+        #it will take in an expense and then it will return for me the catagory of that expense
+        def get_catagory(expense):
+            return expense.category
+
+        #no that I have this helper function I am going to call this function for every expense that I have in the database when I am getting the data about expenses in the expense database
+        #now the way map works is I am going to give irt a function here in this case it will be get_catagory and expenses
+        #so map will be calling the get_catagory function for each expenses it will return a list that will contain catagories for each of the expenses
+        #set will remove all the duplicates in this result returned by the map if any
+        catagory_list = list(set(map(get_catagory, expenses)))
+        def get_expense_catagory_amount(category):
+            amount=0
+            filtered_by_catagory=expenses.filter(category=category)
+
+            for item in filtered_by_catagory:
+                amount+=item.amount
+            return amount
+
+        for x in expenses:
+            for y in catagory_list:
+                # [y] is the key for the finalrep dictionary
+                # get_expense_catagory_amount(y) is a value
+                finalrep[y]=get_expense_catagory_amount(y)
+
+        return JsonResponse({'expense_catagory_data':finalrep}, safe=False)
+
+#this function is for expenses summary for past 12 months
+def summary_past_twelve_months(request):
+        #first of all we need to know the date that it was 1 month ago
+        #for us todo that import datetime
+        #get the date which is today
+        #for us to know what date it was 1 months ago we need to use time delta function
+        #what timedelta does that it takes in the days
+        todays_date = datetime.date.today()
+        twelve_months_ago = todays_date - datetime.timedelta(days=360)
+        #so here we are querying the expenses that has the date greater than or equal to one_month_ago date and date that is less thank or equal to todays_date
+        #this will give us the expenses that is between the todays_date and one_month_ago dates from the database
+        expenses = Expense.objects.filter(owner = request.user ,date__gte = twelve_months_ago, date__lte=todays_date)
+
+        #now construct the final representation of the data that we are getting in
+        finalrep = {}
+
+        #get all the cataogries that exists in the database
+        #I am going to create a helper function todo that
+        #it will take in an expense and then it will return for me the catagory of that expense
+        def get_catagory(expense):
+            return expense.category
+
+        #no that I have this helper function I am going to call this function for every expense that I have in the database when I am getting the data about expenses in the expense database
+        #now the way map works is I am going to give irt a function here in this case it will be get_catagory and expenses
+        #so map will be calling the get_catagory function for each expenses it will return a list that will contain catagories for each of the expenses
+        #set will remove all the duplicates in this result returned by the map if any
+        catagory_list = list(set(map(get_catagory, expenses)))
+
+        def get_expense_catagory_amount(category):
+            amount=0
+            filtered_by_catagory=expenses.filter(category=category)
+
+            for item in filtered_by_catagory:
+                amount+=item.amount
+            return amount
+
+        for x in expenses:
+            for y in catagory_list:
+                # [y] is the key for the finalrep dictionary
+                # get_expense_catagory_amount(y) is a value
+                finalrep[y]=get_expense_catagory_amount(y)
+
+        return JsonResponse({'expense_catagory_data':finalrep}, safe=False)
+
+#this function will render out the expenses summary page
+def stats_view(request):
+    return render(request, 'expenses/stats.html')

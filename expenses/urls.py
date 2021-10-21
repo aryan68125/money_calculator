@@ -35,4 +35,16 @@ urlpatterns = [
 
     #this route will restrict un authorized users from viewing pages in the website
     path('login_required/', views.login_required_function , name='login_required_exp'),
+
+    #this is url for the endpoint that handles the representation of expenses of last 1 month in form of a chart in expense summary page
+    path('expense_catagory_summary', views.expense_catagory_summary, name='expense_catagory_summary'),
+
+    #url for expenses summary past 6 months summary_past_six_months
+    path('summary_past_six_months', views.summary_past_six_months, name='summary_past_six_months'),
+
+    #url for expenses summary past 6 months summary_past_twelve_months
+    path('summary_past_twelve_months', views.summary_past_twelve_months, name='summary_past_twelve_months'),
+
+    #this url will be rendered when we go in the expenses summary
+    path('stats_view', views.stats_view, name='stats_view'),
 ]
