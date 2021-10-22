@@ -47,4 +47,8 @@ urlpatterns = [
 
     #this url will be rendered when we go in the expenses summary
     path('stats_view', views.stats_view, name='stats_view'),
+
+    #urls related to expenses export functionality
+    path('export_csv', views.export_csv, name='export_csv'),
+    path('export_excel', views.export_excel, name='export_excel'),
 ]

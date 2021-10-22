@@ -16,13 +16,17 @@ from django.core.paginator import Paginator
 import json
 
 #this will allow us to send in a json back
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 #import the UserPreferences model from userPreferences application
 from userpreferences.models import UserPreferences
 
 #this will allow us to use date and time functions in our views.py
 import datetime
+
+#this module will help us to export our expenses in the csv format
+import csv
+import xlwt
 
 #login_required decorator will not allow any user that is not logged in this website
 @login_required(login_url='login_required_exp')
@@ -70,6 +74,8 @@ def search_expenses(request):
         #since we are passing a list and not a dictionary this can fail to be serialize so pass safe = False
         return JsonResponse(list(data), safe=False)
 
+
+#``````````````````````handeling expense crud functionality STARTS HERE ````````````````````````````````````````````````````
 #this fumction will handle the addition of new expense in our application
 #login_required decorator will not allow any user that is not logged in this website
 @login_required(login_url='login_required_exp')
@@ -197,7 +203,9 @@ def expense_delete(request, id):
 
 def login_required_function(request):
     return render(request, 'authentication/login_required.html')
+#``````````````````````handeling expense crud functionality ENDS HERE ````````````````````````````````````````````````````
 
+#``````````````````````handeling expense summary charts STARTS HERE````````````````````````````````````````````````````
 #this function will sct as an endpoint for our javascript
 #this is weponsible for feeding our charts the data which will be used to acreate an expense chart for the past 6 months or past 1 month or pas week etc...
 def expense_catagory_summary(request): # this function is for expenses summary for past one month
@@ -333,3 +341,58 @@ def summary_past_twelve_months(request):
 #this function will render out the expenses summary page
 def stats_view(request):
     return render(request, 'expenses/stats.html')
+#``````````````````````handeling expense summary charts ENDS HERE````````````````````````````````````````````````````
+
+
+#``````````````````````handeling expense export functionality STARTS HERE ````````````````````````````````````````````````````
+
+#this function will handle the export of expense in csv format
+def export_csv(request):
+    #here we are gonna be using the python csv module
+    #we need to create a response tha we will send to the user using Httpresponse class
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=Expenses'+ str(datetime.datetime.now())+'.csv'
+    writer=csv.writer(response)
+    writer.writerow(['Amount','Description','Category','Date']) #this will set up the first row
+    expenses = Expense.objects.filter(owner=request.user)
+
+    for expense in expenses:
+        writer.writerow([expense.amount,expense.description,expense.category,expense.date])
+    return response
+
+#this function will handle the export of expense in xcel format
+#inorder to do that we will be using xlwt
+def export_excel(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=Expenses'+ str(datetime.datetime.now())+'.xls'
+
+    #import xlwt before writing the code below
+    workbook_wb = xlwt.Workbook(encoding='utf-8')  #you can think of a workbook as an excel file itself
+    #now we can start adding sheets to this file
+    workbook_sheets = workbook_wb.add_sheet('Expenses') #here Expenses is the name of the sheet
+    #now we can start andding rows to the sheets
+    row_num=0 #make this variable bold because its gonna be the header in this excel sheet
+    font_style = xlwt.XFStyle()
+    #we want to make the first row bold
+    font_style.font.bold=True
+
+    #creating columns in the excel sheet
+    columns = ['Amount','Description','Category','Date']
+    #so now once we have the columns setup hence we can inert it in the row that we've created earlier
+    for column_number in range(len(columns)):
+        workbook_sheets.write(row_num,column_number, columns[column_number], font_style)#write the row number the column number, the actual content and the font configuration
+    #reset the font style so that the header only keep the bold font style
+    font_style=xlwt.XFStyle()
+
+    #now create the dynamic rows for the expenses data in the excel sheet
+    rows = Expense.objects.filter(owner=request.user).values_list('amount','description','category','date')
+    #now that we have got our row we can add this row to our xcel sheet
+    for row in rows:
+        row_num+=1
+        for column_number in range(len(row)):
+            # typecast row[column_number] to string because it can cause rendering issues in the ms excel of this file if not done
+            workbook_sheets.write(row_num,column_number, str(row[column_number]), font_style) #write the row number the column number, the actual content and the font configuration
+    workbook_wb.save(response)
+    return response
+
+#``````````````````````handeling expense export functionality ENDS HERE ````````````````````````````````````````````````````

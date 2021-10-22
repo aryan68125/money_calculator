@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+  <div class = "contianer md-5">
+    <!---include the side bar navigation here from the partials folder to this page--->
+    {% include 'partials/sidebar.html' %}
+    <div class="row" style="margin-top:15px;">
+      <!---add a bootstrap breadcrum that will tell us where we are in the website expenses home page--->
+      <div class = "col-md-10">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'expenses' %}">Expenses</a></li>
+            <li class="breadcrumb-item"><a href="#">Developer Info</a></li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mt-3">
+  <div class = "contianer md-5">
+    <div class="row" style="margin-top:15px;">
+      <!---add a bootstrap breadcrum that will tell us where we are in the website expenses home page--->
+      <div class = "col-md-10">
+        <!---Developer Details will come here--->
+        <img src="{% static 'images/profiles/im_2.jpg' %}" class="rounded mx-auto d-block" style = "  display: block; margin-left: auto; margin-right: auto; width: 30%;" alt="...">
+      </div>
+
+      <div class = "col-md-10" style="margin-top:20px;">
+        <h1>About:-</h1>
+        <h5>
+          Hello I am Aditya Kumar. I am a 3rd year Student in AKTU. I am currently persuing my B.tech computer science. I will be passing out in year 2023.
+          I've built this project to practice my skills as a web developer. I used Django, python, JavaScript, HTMl and CSS along with postgreSQL database
+          for this website.
+        </h5>
+      </div>
+
+      <div class = "col-md-10" style="margin-top:20px;">
+        <h1>contact me:-</h1>
+        <h5>email:- aryan68125@gmail.com</h5>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+{% endblock content %}

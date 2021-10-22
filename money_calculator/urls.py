@@ -34,4 +34,7 @@ urlpatterns = [
 
     #preferences app urls routes
     path('preferences/', include('userpreferences.urls')),
+
+    #preferences app urls routes
+    path('developer/', include('developer.urls')), 
 ]

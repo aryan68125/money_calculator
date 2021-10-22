@@ -47,7 +47,11 @@
 
     <!---search field--->
     <div class="col-md-4">
-      <div class="form-group">
+      <!---all the links related to exporting expenses in prd, xcel and csv formats will be present here--->
+      <a href="{% url 'export_csv' %}" class="btn btn-secondary">Export CSV</a>
+      <a href="{% url 'export_excel' %}" class="btn btn-primary">Export EXCEL</a>
+
+      <div class="form-group mt-3">
           <input class"form-control" type="text" id="searchField" placeholder="search"/>
       </div>
     </div>

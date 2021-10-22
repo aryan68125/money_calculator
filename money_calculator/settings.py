@@ -62,7 +62,10 @@ INSTALLED_APPS = [
     'storages',
 
     #add userpreferences app in installed apps this app will keep track of user preferences
-    'userpreferences.apps.UserpreferencesConfig'
+    'userpreferences.apps.UserpreferencesConfig',
+
+    #this app will show developer info
+    'developer.apps.DeveloperConfig',
 ]
 
 MIDDLEWARE = [
