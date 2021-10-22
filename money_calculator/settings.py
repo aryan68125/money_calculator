@@ -117,10 +117,10 @@ WSGI_APPLICATION = 'money_calculator.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'incomeexpensesdb',
-        'USER': 'postgres',
-        'PASSWORD': 'Ilovetoneystark',
-        'HOST': '127.0.0.1',
+        'NAME': 'd91vt30d6hg5pd',
+        'USER': 'ryaijhppqqzvoi',
+        'PASSWORD': '5d0f4859fe1c4d83dc7e2975a0d63df9bf989e292b640c97998225ebd3dccf68',
+        'HOST': 'ec2-52-6-29-180.compute-1.amazonaws.com',
         'PORT': 5432,
     }
 }
