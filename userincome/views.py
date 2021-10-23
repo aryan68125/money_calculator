@@ -41,9 +41,13 @@ def index(request):
     #now we need to construct a page object
     #now a page object represents the expenses we will se on those individual pages
     page_obj = Paginator.get_page(paginator,page_number)
-
+    
     #query the database currency of the user
-    currency = UserPreferences.objects.get(user=request.user).currency
+    userPreferences_exists = UserPreferences.objects.filter(user=request.user).exists()
+    if userPreferences_exists:
+        currency = UserPreferences.objects.get(user=request.user).currency
+    else:
+        currency = "NONE"
 
     stuff_for_frontend = {
           'income':income,
