@@ -30,7 +30,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-o8n8*rzdm=$x9sq-$2n$jpg^_6ur&im8@=*d3f%i0mcqon9ilb'
+SECRET_KEY = 'django-insecure-oi0mcqxrzo8n8dm9sqjpgim8on9ilb8n8*rzo8n8dm=$xrzo8n8dm9sq-$2n$xrzo8n8dm9sqjpg^_6ur&xrzo8n8dm9sqjpgim8@=*d3f%i0mcqxrzo8n8dm9sqjpgim8on9ilb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -117,10 +117,10 @@ WSGI_APPLICATION = 'money_calculator.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd91vt30d6hg5pd',
-        'USER': 'ryaijhppqqzvoi',
-        'PASSWORD': '5d0f4859fe1c4d83dc7e2975a0d63df9bf989e292b640c97998225ebd3dccf68',
-        'HOST': 'ec2-52-6-29-180.compute-1.amazonaws.com',
+        'NAME': 'database name',
+        'USER': 'user name',
+        'PASSWORD': 'database password',
+        'HOST': 'host name where your dabasse is hosted',
         'PORT': 5432,
     }
 }
@@ -188,8 +188,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'userpiyush6@gmail.com'
-EMAIL_HOST_PASSWORD = 'wcnvtyexogcbscee'
+EMAIL_HOST_USER = 'your email address'
+EMAIL_HOST_PASSWORD = 'your password'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
