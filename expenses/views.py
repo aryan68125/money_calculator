@@ -47,6 +47,8 @@ def index(request):
     userPreferences_exists = UserPreferences.objects.filter(user=request.user).exists()
     if userPreferences_exists:
         currency = UserPreferences.objects.get(user=request.user).currency
+    else:
+        currency = "NONE"
 
     stuff_for_frontend = {
           'expenses':expenses,
