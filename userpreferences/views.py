@@ -11,7 +11,11 @@ from . models import UserPreferences
 
 from django.contrib import messages
 
+#inorder to protect the expenses application home page from unauthorized acess we need this decorator
+from django.contrib.auth.decorators import login_required
+
 #now create a view for preferences url
+@login_required(login_url='login_required_pref')
 def preferences(request):
     #convert the list of curerencies which is in json object into a python dictionary then we can render it in the fronend of our website
     currency_data = []
@@ -71,3 +75,7 @@ def preferences(request):
             'user_preferences': user_preferences,
         }
         return render(request, 'preferences/preferences.html', stuff_for_frontend)
+
+#this function will prevent the user from viewing pages who is not logged in in this website
+def login_required_function(request):
+    return render(request, 'authentication/login_required.html')

@@ -337,6 +337,7 @@ def summary_past_twelve_months(request):
         return JsonResponse({'income_source_data':finalrep}, safe=False)
 
 #this function will render out the expenses summary page
+@login_required(login_url='login_required_exp')
 def stats_view(request):
     return render(request, 'income/stats.html')
 

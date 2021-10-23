@@ -19,4 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 urlpatterns = [
 
     path('', views.preferences , name='preferences'),
+
+    #this route will restrict un authorized users from viewing pages in the website
+    path('login_required/', views.login_required_function , name='login_required_pref'),
 ]
