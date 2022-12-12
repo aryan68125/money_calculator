@@ -14,3 +14,8 @@ from django.core.wsgi import get_wsgi_application
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'money_calculator.settings')
 
 application = get_wsgi_application()
+
+'''
+for deploying on vercel
+'''
+app = application
