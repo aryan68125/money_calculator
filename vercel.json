@@ -1,31 +1,3 @@
-{
-  "builds" : [
-
-     {
-       "src": "money_calculator/wsgi.py",
-       "use": "@vercel/python",
-       "config": { "maxLambdaSize": "15mb", "runtime": "python3.8" }
-     },
-
-     {
-       "src": "build_files.sh",
-       "use": "@vercel/static-build",
-       "config": { "distDir": "staticfiles_build" }
-     }
-]
-       "routes":[
-         {
-           "src": "static/(.*)",
-           "dest": "/static/$1"
-         },
-
-         {
-           "src": "/(.*)",
-           "dest": "money_calculator/wsgi.py"
-         }
-       ]
-     }
-
      {
        "builds": [
          {
@@ -41,7 +13,7 @@
        ],
        "routes": [
          {
-           
+
              "src": "static/(.*)",
              "dest": "/static/$1"
            },
@@ -50,6 +22,6 @@
              "src": "/(.*)",
              "dest": "money_calculator/wsgi.py"
            }
-         
+
        ]
      }
