@@ -176,7 +176,7 @@ STATICFILES_DIRS = [
 #collect static is a command that we will use to run STATIC_ROOT
 #collect static is a command that will tell django to take all the files in the static folder and its gonna bundle them up in one file and django can take care of that from there
 '''For hosting on vercel'''
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'static')
 
 #configuring the path where the images should be stored when a user uploads his/her images into the website
 #by default the images uploaded by the user will be stored in the root directory of the project
