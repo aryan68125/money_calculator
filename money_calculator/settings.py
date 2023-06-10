@@ -105,25 +105,25 @@ WSGI_APPLICATION = 'money_calculator.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 #connect your django project to a local production postgresSQL database server
 #this postgreSQL can be managed by pgadmin4
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd91vt30d6hg5pd',
-        'USER': 'ryaijhppqqzvoi',
-        'PASSWORD': '5d0f4859fe1c4d83dc7e2975a0d63df9bf989e292b640c97998225ebd3dccf68',
-        'HOST': 'ec2-52-6-29-180.compute-1.amazonaws.com',
-        'PORT': 5432,
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'd91vt30d6hg5pd',
+#         'USER': 'ryaijhppqqzvoi',
+#         'PASSWORD': '5d0f4859fe1c4d83dc7e2975a0d63df9bf989e292b640c97998225ebd3dccf68',
+#         'HOST': 'ec2-52-6-29-180.compute-1.amazonaws.com',
+#         'PORT': 5432,
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
